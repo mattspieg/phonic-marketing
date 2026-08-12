@@ -1,0 +1,17 @@
+# Basic safety header for all static files.
+/*
+  X-Content-Type-Options: nosniff
+
+# Ashby and other externally loaded CSS should update quickly during iteration.
+/css/*
+  Content-Type: text/css; charset=utf-8
+  Cache-Control: public, max-age=300, s-maxage=3600
+
+# Shared static assets can tolerate a modest browser cache.
+/assets/*
+  Cache-Control: public, max-age=86400
+
+# Voice samples are read by Web Audio from Webflow/custom domains.
+/assets/audio/*
+  Access-Control-Allow-Origin: *
+  Content-Type: audio/mpeg

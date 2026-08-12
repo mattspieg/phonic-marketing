@@ -1,0 +1,15 @@
+# Copy this file to .dev.vars for local Worker development.
+# Never commit real values.
+
+# Required for Phonic session-token and outbound-call endpoints.
+PHONIC_API_KEY=
+
+# Required when the Webflow-to-Attio webhook endpoint is enabled.
+ATTIO_API_TOKEN=
+WEBFLOW_WEBHOOK_SECRET=
+
+# Optional: only used when PHONIC_OUTBOUND_MODE is set to "sip".
+PHONIC_SIP_ADDRESS=
+PHONIC_FROM_PHONE_NUMBER=
+PHONIC_SIP_AUTH_USERNAME=
+PHONIC_SIP_AUTH_PASSWORD=

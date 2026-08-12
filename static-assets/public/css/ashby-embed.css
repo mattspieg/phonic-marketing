@@ -1,0 +1,286 @@
+/* Phonic Ashby job-board theme
+ * Matches the desktop and mobile layouts in the Phonic Website Design file.
+ * Keep selectors anchored to Ashby's documented semantic classes: its
+ * generated CSS-module class names change between releases.
+ */
+
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("https://cdn.prod.website-files.com/6a26780bad2144a03e65dcec/6a315b4c61b6538d8a83f1cd_aeonikpro-regular.woff2")
+    format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Aeonik Pro";
+  src: url("https://cdn.prod.website-files.com/6a26780bad2144a03e65dcec/6a315b4cc8d69a7b212c9e5a_aeonikpro-medium.woff2")
+    format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+}
+
+:root {
+  --phonic-bg-default: #f9f7f5;
+  --phonic-bg-light: #ffffff;
+  --phonic-bg-button: #f0eeec;
+  --phonic-bg-button-hover: #282624;
+  --phonic-text-high: #25221d;
+  --phonic-text-button: #211f1e;
+  --phonic-text-mid: rgba(11, 10, 9, 0.6);
+  --phonic-accent: #fe531d;
+  --phonic-card-border: rgba(20, 17, 17, 0.03);
+  --phonic-card-shadow: rgba(20, 17, 17, 0.03);
+  --phonic-arrow-dark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M5.33333 3.8335H12.1667V10.6668M4 12.0002L12 4.00016' stroke='%23211f1e' stroke-width='1.5'/%3E%3C/svg%3E");
+  --phonic-arrow-light: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M5.33333 3.8335H12.1667V10.6668M4 12.0002L12 4.00016' stroke='white' stroke-width='1.5'/%3E%3C/svg%3E");
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--phonic-text-high);
+  font-family: "Aeonik Pro", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+footer {
+  display: none !important;
+}
+
+/* Remove Ashby's max-width shell and the board-level title. */
+#root,
+#root > div {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ashby-job-board-heading,
+#root > div > div:has(> .ashby-job-board-heading) {
+  display: none !important;
+}
+
+/* Ashby wraps the department groups in an un-stable CSS-module class. */
+#root > div > div:has(.ashby-job-posting-brief-list),
+#root
+  > div
+  > div:has(.ashby-job-posting-brief-list)
+  > div:has(> .ashby-department-heading) {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Department eyebrow */
+.ashby-department-heading {
+  display: flex !important;
+  width: max-content;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 20px !important;
+  padding: 6px 10px !important;
+  color: var(--phonic-text-button) !important;
+  font-family: "Aeonik Pro", Arial, sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  line-height: 19px !important;
+  letter-spacing: 0 !important;
+}
+
+.ashby-department-heading::before {
+  display: block !important;
+  width: 6px;
+  height: 6px;
+  flex: 0 0 6px;
+  margin: 0 !important;
+  border-radius: 999px;
+  background: var(--phonic-accent);
+  content: "";
+}
+
+.ashby-department-heading-level {
+  width: auto !important;
+  flex: 0 0 auto !important;
+  color: inherit !important;
+}
+
+/* Job-card stack */
+.ashby-job-posting-brief-list {
+  display: flex !important;
+  width: 100%;
+  flex-direction: column;
+  gap: 12px;
+  margin: 0 0 40px !important;
+  padding: 0 !important;
+}
+
+.ashby-job-posting-brief-list:last-child {
+  margin-bottom: 0 !important;
+}
+
+.ashby-job-posting-brief-list > a {
+  position: relative;
+  display: block !important;
+  width: 100%;
+  margin: 0 !important;
+  padding: 8px !important;
+  border: 0 !important;
+  border-radius: 5px !important;
+  background: var(--phonic-bg-default);
+  box-shadow: none !important;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 180ms ease;
+}
+
+.ashby-job-posting-brief-list > a:hover,
+.ashby-job-posting-brief-list > a:active,
+.ashby-job-posting-brief-list > a:focus-visible {
+  background: var(--phonic-bg-button);
+}
+
+.ashby-job-posting-brief-list > a:focus-visible {
+  outline: 2px solid var(--phonic-accent);
+  outline-offset: 2px;
+}
+
+.ashby-job-posting-brief {
+  display: block !important;
+  width: 100%;
+  min-width: 0;
+  margin: 0 !important;
+  padding: 12px 116px 12px 12px !important;
+  border: 0 !important;
+  border-radius: 2px !important;
+  background: var(--phonic-bg-light) !important;
+  box-shadow:
+    inset 0 0 0 1px var(--phonic-card-border),
+    0 1px 1.5px var(--phonic-card-shadow) !important;
+}
+
+.ashby-job-posting-brief-title {
+  width: 100%;
+  margin: 0 !important;
+  color: var(--phonic-text-high) !important;
+  font-family: "Aeonik Pro", Arial, sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  line-height: 28px !important;
+  letter-spacing: 0 !important;
+}
+
+/* Ashby adds cap-height trimming through empty ::before blocks. The Figma
+ * cards use the declared line boxes, so remove those generated trim blocks. */
+.ashby-job-posting-brief-title::before,
+.ashby-job-posting-brief-details p::before {
+  display: none !important;
+  margin: 0 !important;
+  content: none !important;
+}
+
+.ashby-job-posting-brief-details {
+  width: 100%;
+  margin: 6px 0 0 !important;
+  color: var(--phonic-text-mid) !important;
+}
+
+.ashby-job-posting-brief-details p {
+  width: 100%;
+  margin: 0 !important;
+  color: inherit !important;
+  font-family: "Aeonik Pro", Arial, sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  line-height: 24px !important;
+  letter-spacing: -0.16px !important;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+/* Ashby exposes no Apply element in the list markup, so the control is drawn
+ * as a pseudo-element while the whole card remains the real link. */
+.ashby-job-posting-brief-list > a::after {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  display: flex;
+  width: 88px;
+  height: 36px;
+  align-items: center;
+  padding: 0 32px 0 18px;
+  border-radius: 5px;
+  background-color: var(--phonic-bg-button);
+  background-image: var(--phonic-arrow-dark);
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 14px 14px;
+  color: var(--phonic-text-button);
+  content: "Apply";
+  font-family: "Aeonik Pro", Arial, sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 22px;
+  white-space: nowrap;
+  word-break: normal;
+  transform: translateY(-50%);
+  transition:
+    background-color 180ms ease,
+    background-position 180ms ease,
+    color 180ms ease;
+}
+
+.ashby-job-posting-brief-list > a:hover::after,
+.ashby-job-posting-brief-list > a:active::after,
+.ashby-job-posting-brief-list > a:focus-visible::after {
+  background-color: var(--phonic-bg-button-hover);
+  background-image: var(--phonic-arrow-light);
+  background-position: right 10px calc(50% - 2px);
+  color: #ffffff;
+}
+
+@media (max-width: 767px) {
+  .ashby-job-posting-brief {
+    padding-right: 64px !important;
+  }
+
+  .ashby-job-posting-brief-details p {
+    font-size: 13px !important;
+    line-height: 19px !important;
+    letter-spacing: 0 !important;
+  }
+
+  .ashby-job-posting-brief-list > a::after {
+    width: 36px;
+    padding: 0;
+    background-position: center;
+    content: "";
+  }
+
+  .ashby-job-posting-brief-list > a:hover::after,
+  .ashby-job-posting-brief-list > a:active::after,
+  .ashby-job-posting-brief-list > a:focus-visible::after {
+    background-position: calc(50% + 2px) calc(50% - 2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ashby-job-posting-brief-list > a,
+  .ashby-job-posting-brief-list > a::after {
+    transition: none;
+  }
+}

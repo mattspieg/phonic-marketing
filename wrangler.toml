@@ -1,0 +1,19 @@
+name = "phonic-session-token"
+main = "src/index.js"
+compatibility_date = "2026-06-19"
+workers_dev = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+[observability.traces]
+enabled = true
+
+[vars]
+ALLOWED_ORIGIN = "https://phonic.co,https://www.phonic.co,https://phonic.ai,https://www.phonic.ai,https://phonic-co-staging.webflow.io"
+PHONIC_DEFAULT_COUNTRY_CODE = "1"
+PHONIC_OUTBOUND_MODE = "managed"
+ATTIO_DEFAULT_COUNTRY_CODE = "1"
+ATTIO_DEMO_REQUEST_LIST_ID = "33d16209-d8b2-4527-931f-dbc9d681a823"
+ATTIO_DEMO_REQUEST_DEFAULT_STATUS = "New"

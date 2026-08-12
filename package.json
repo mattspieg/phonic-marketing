@@ -1,0 +1,30 @@
+{
+  "name": "phonic-marketing",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "cloudflare:whoami": "wrangler whoami",
+    "dev": "vite --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "check:worker": "node --check src/index.js",
+    "verify": "npm run typecheck && npm run check:worker",
+    "deploy:worker": "npm run verify && wrangler deploy",
+    "deploy:assets": "wrangler pages deploy static-assets/public --project-name=phonic-static-assets"
+  },
+  "dependencies": {
+    "@webflow/data-types": "2.0.0",
+    "@webflow/react": "2.0.0",
+    "react": "19.2.7",
+    "react-dom": "19.2.7"
+  },
+  "devDependencies": {
+    "@types/react": "19.2.17",
+    "@types/react-dom": "19.2.3",
+    "typescript": "6.0.3",
+    "vite": "^8.0.16",
+    "wrangler": "4.121.0"
+  }
+}
