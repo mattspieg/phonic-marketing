@@ -5,7 +5,7 @@
 At completion, the client should own:
 
 - The GitHub repository and branch controls
-- The Cloudflare account, Worker, Pages project, billing, and GitHub App installation
+- The Cloudflare account, both Workers (`phonic-session-token` and `phonic-attio-webhook`), Pages project, billing, and GitHub App installation
 - The Phonic, Attio, and Webflow credentials
 - The Webflow site, Code Components, custom code, and webhook configuration
 
@@ -15,7 +15,7 @@ Repository ownership alone does not transfer deployed services, secrets, URLs, d
 
 1. Use or create the client-owned Cloudflare account.
 2. In Cloudflare, open **Manage Account > Members**, invite the implementation user, and assign **Workers Platform Admin**. Super Administrator is not required.
-3. In **Workers & Pages**, begin a Git-connected project, authorize the Cloudflare GitHub App, and restrict its installation to this repository only.
+3. In **Workers & Pages**, create/connect one Worker project for each Wrangler config in this repository, authorize the Cloudflare GitHub App, and restrict its installation to this repository only.
 4. Confirm the repository's default production branch is `main`.
 
 Useful Cloudflare documentation:
@@ -31,25 +31,26 @@ After the Cloudflare invitation is accepted, `npm run cloudflare:whoami` must sh
 
 Wrangler can then:
 
-- Create the Worker on the first `wrangler deploy` if it does not exist
-- Deploy new Worker versions and perform rollbacks
+- Create either Worker on the first deploy when the matching config is used
+- Deploy new versions and perform rollbacks for each Worker
+- Set and list secrets per Worker
 - Create and deploy a Direct Upload Pages project
-- Set Worker secrets through interactive prompts
 - List project deployments and configured secret names
 
 Wrangler does not perform the client's GitHub App authorization. Native Git-connected Pages creation is best completed through the Cloudflare dashboard after that authorization. Creating Pages with `wrangler pages project create` creates a Direct Upload project, which cannot later be converted to native Git integration.
 
 ## Recommended deployment setup
 
-### Worker
+### Phonic API Worker
 
 Create or connect a Worker named `phonic-session-token`:
 
 - Repository: this repository
 - Root directory: `/`
+- Wrangler config: `wrangler.toml`
 - Production branch: `main`
 - Build command: `npm run verify`
-- Deploy command: `npx wrangler deploy`
+- Deploy command: `npx wrangler deploy --config wrangler.toml`
 
 For a CLI-first initial deployment:
 
@@ -59,7 +60,26 @@ npm run cloudflare:whoami
 npm run deploy:worker
 ```
 
-After the Worker exists, add the runtime secrets from [SECRETS.md](SECRETS.md). Build variables and runtime secrets are different; the Phonic and Attio credentials belong in the Worker's runtime **Variables & Secrets** settings.
+### Attio webhook Worker
+
+Create or connect a separate Worker named `phonic-attio-webhook`:
+
+- Repository: this repository
+- Root directory: `/`
+- Wrangler config: `wrangler.attio.toml`
+- Production branch: `main`
+- Build command: `npm run verify`
+- Deploy command: `npx wrangler deploy --config wrangler.attio.toml`
+- Webhook route: `/api/webflow/attio-person`
+
+For a CLI-first initial deployment:
+
+```bash
+npm run cloudflare:whoami
+npm run deploy:attio
+```
+
+Add only the Attio and Webflow webhook secrets listed in [SECRETS.md](SECRETS.md) to this Worker.
 
 ### Static assets
 
@@ -85,27 +105,31 @@ npx wrangler pages project create phonic-static-assets
 npm run deploy:assets
 ```
 
+### Migration order from the current combined Worker
+
+The previous Worker served both Phonic and Attio routes. Deploy `phonic-attio-webhook` first, move the Webflow webhook to its new URL, and verify an approved test submission. Only then deploy the updated `phonic-session-token` Worker, which intentionally no longer serves the Attio route.
+
 ## URL cutover inventory
 
 Deploy the client-owned projects before changing the live Webflow site. Replace all old deployment URLs together:
 
 | Consumer | Current source location | New destination |
 | --- | --- | --- |
-| Live conversation session token | `src/webflow-ai-components/PhonicLiveConversation.tsx` | Client Worker `/api/phonic/session-token` |
-| Request-a-call default endpoint | `static-assets/public/js/request-a-call-form.js` | Client Worker `/api/phonic/outbound-call` |
+| Live conversation session token | `src/webflow-ai-components/PhonicLiveConversation.tsx` | Client Phonic Worker `/api/phonic/session-token` |
+| Request-a-call default endpoint | `static-assets/public/js/request-a-call-form.js` | Client Phonic Worker `/api/phonic/outbound-call` |
 | Multilingual audio samples | `src/webflow-ai-components/PhonicMultiLanguagePlayback.tsx` | Client Pages `/assets/audio/...` |
 | Webflow custom-code script reference | Webflow site settings/page custom code | Client Pages `/js/request-a-call-form.js` |
 | Ashby stylesheet reference | Ashby job-board configuration | Client Pages `/css/ashby-embed.css` |
-| Webflow form webhook | Webflow webhook configuration | Client Worker `/api/webflow/attio-person` |
+| Webflow form webhook | Webflow webhook configuration | Client Attio Worker `/api/webflow/attio-person` |
 
 Client-owned custom domains such as `api.<client-domain>` and `assets.<client-domain>` are preferable to provider-specific URLs when DNS ownership permits. They reduce future URL changes if the deployment account changes again.
 
 ## Verification and cutover
 
 1. Run `npm ci`, `npm run verify`, and `npm audit`.
-2. Deploy the Worker and assets in the client account without changing production consumers.
+2. Deploy the Attio Worker first, move and test the Webflow webhook, then deploy the Phonic Worker and assets without changing the other production consumers.
 3. Confirm the expected Worker and Pages URLs respond and inspect Cloudflare logs.
-4. Add the required Worker secrets and verify `npx wrangler secret list` shows their names.
+4. Add the required secrets to the matching Worker and verify each `npx wrangler secret list --config ...` shows the expected names.
 5. Update the source URLs listed above and upload the revised standalone `.tsx` files to Webflow.
 6. Update Webflow custom code, the Webflow webhook URL/secret, and the Ashby stylesheet URL.
 7. Publish Webflow staging and test:
@@ -118,8 +142,9 @@ Client-owned custom domains such as `api.<client-domain>` and `assets.<client-do
 
 ## Rollback and close-out
 
-- Keep the previous Cloudflare deployments available for a short agreed rollback period.
-- If the Worker fails, use Cloudflare version rollback and restore the previous Webflow endpoint URLs.
+- Keep the previous deployments of both Workers and Pages available for a short agreed rollback period.
+- If the Phonic Worker fails, roll back `phonic-session-token` and restore the previous Phonic endpoint URLs.
+- If the Attio Worker fails, roll back `phonic-attio-webhook` and restore the previous Webflow webhook URL.
 - If static assets fail, roll back the Pages deployment or restore the previous asset URLs.
 - Do not remove old deployments until the client confirms that they can access GitHub, Cloudflare, Webflow, Phonic, and Attio and can complete a deployment without the previous owner.
 - After sign-off, revoke the previous account credentials and remove or reduce temporary collaborator access.

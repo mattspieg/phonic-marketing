@@ -1,10 +1,10 @@
 # Copy this file to .dev.vars for local Worker development.
 # Never commit real values.
 
-# Required for Phonic session-token and outbound-call endpoints.
+# Used by the Phonic Worker (wrangler.toml).
 PHONIC_API_KEY=
 
-# Required when the Webflow-to-Attio webhook endpoint is enabled.
+# Used by the Attio Worker (wrangler.attio.toml).
 ATTIO_API_TOKEN=
 WEBFLOW_WEBHOOK_SECRET=
 

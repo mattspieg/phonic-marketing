@@ -9,9 +9,12 @@
     "cloudflare:whoami": "wrangler whoami",
     "dev": "vite --host 127.0.0.1",
     "typecheck": "tsc --noEmit",
-    "check:worker": "node --check src/index.js",
-    "verify": "npm run typecheck && npm run check:worker",
+    "check:worker": "node --check src/phonic-api.js",
+    "check:attio": "node --check src/attio.js",
+    "test:attio-name": "node --test tests/attio-name.test.mjs",
+    "verify": "npm run typecheck && npm run check:worker && npm run check:attio && npm run test:attio-name",
     "deploy:worker": "npm run verify && wrangler deploy",
+    "deploy:attio": "npm run verify && wrangler deploy --config wrangler.attio.toml",
     "deploy:assets": "wrangler pages deploy static-assets/public --project-name=phonic-static-assets"
   },
   "dependencies": {
