@@ -23,7 +23,7 @@ The current configuration uses managed outbound calling, so the SIP values are n
 
 ## Non-secret variables
 
-The following current production values are declared in the matching Wrangler config files and are safe to version:
+The following non-secret values are safe to version. The first group is declared in the matching Wrangler config files; the optional overrides are read by `src/attio.js` when present:
 
 Phonic Worker (`wrangler.toml`):
 
@@ -37,7 +37,18 @@ Attio Worker (`wrangler.attio.toml`):
 - `ATTIO_DEFAULT_COUNTRY_CODE`
 - `ATTIO_DEMO_REQUEST_LIST_ID`
 - `ATTIO_DEMO_REQUEST_DEFAULT_STATUS`
-- Optional Attio field-slug overrides supported by `src/attio.js`
+
+Optional Attio schema overrides:
+
+- `ATTIO_DEMO_REQUEST_PARENT_OBJECT`
+- `ATTIO_PERSON_FIELD_SLUGS` (JSON object)
+- `ATTIO_PERSON_COUNTRY_ATTRIBUTE`
+- `ATTIO_PERSON_SOURCE_PAGE_ATTRIBUTE`
+- `ATTIO_PERSON_LATEST_FORM_SUBMITTED_ATTRIBUTE`
+- `ATTIO_PERSON_LATEST_DEMO_REQUEST_AT_ATTRIBUTE`
+- `ATTIO_PERSON_COMPANY_NAME_ATTRIBUTE`
+- `ATTIO_DEMO_REQUEST_FIELD_SLUGS` (JSON object)
+- `ATTIO_DEMO_REQUEST_LIST` (legacy alias for `ATTIO_DEMO_REQUEST_LIST_ID`)
 
 ## Setting production secrets
 

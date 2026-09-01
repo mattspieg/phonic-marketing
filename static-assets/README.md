@@ -38,18 +38,26 @@ Cloudflare Direct Upload projects cannot later be converted to native Git integr
 
 ```text
 public/
+  _headers
+  assets/
+    audio/
+      phonic-voice-sample-1.mp3
+      phonic-voice-sample-2.mp3
+    video/
+      how-it-works-v011-hevc-safari.mp4
+      how-it-works-v011-vp9-chrome.webm
   css/
     ashby-embed.css
-  assets/
-    fonts/
-    images/
-    misc/
-  _headers
+  js/
+    request-a-call-form.js
 ```
 
+Only directories containing tracked files are shown. Git does not preserve empty directories; add `assets/images/`, `assets/fonts/`, or `assets/misc/` when those asset types are needed.
+
 - Put CSS files in `public/css/`.
-- Put images in `public/assets/images/`.
-- Put fonts in `public/assets/fonts/`.
-- Put other downloadable or hosted files in `public/assets/misc/`.
+- Put browser JavaScript in `public/js/`.
+- Put audio and video in the matching subdirectories under `public/assets/`.
+- Put images in `public/assets/images/` and fonts in `public/assets/fonts/` when needed.
+- Put other downloadable or hosted files in `public/assets/misc/` when needed.
 
 The `_headers` file adds basic security and cache headers. CSS is cached briefly so Ashby styling changes can roll out quickly. General assets use a longer cache window; prefer versioned or fingerprinted filenames before increasing cache lifetimes.

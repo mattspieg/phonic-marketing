@@ -40,7 +40,7 @@ For local Worker secrets, copy `.dev.vars.example` to `.dev.vars` and fill in lo
 | `npm run typecheck` | Type-check the Webflow TypeScript components |
 | `npm run check:worker` | Check the Phonic Worker JavaScript syntax |
 | `npm run check:attio` | Check the Attio Worker JavaScript syntax |
-| `npm run verify` | Type-check components and check both Workers |
+| `npm run verify` | Type-check components, check both Worker entrypoints, and run the Attio tests |
 | `npm run cloudflare:whoami` | Confirm the authenticated Cloudflare user and account before deploying |
 | `npm run deploy:worker` | Verify and deploy `phonic-session-token` from `wrangler.toml` |
 | `npm run deploy:attio` | Verify and deploy `phonic-attio-webhook` from `wrangler.attio.toml` |
